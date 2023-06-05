@@ -5,8 +5,8 @@ import Contact from "../views/Contact.vue"
 import Favoris from "../views/Favoris.vue"
 import Connexion from "../views/Connexion.vue"
 import Provide from "../views/Provide.vue"
-import  Store  from "../views/Store.vue"
-
+import Store  from "../views/Store.vue"
+import Cart from "../views/Cart.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +45,11 @@ const router = createRouter({
       path: '/Store',
       name: 'Store',
       component: Store
+    },
+    {
+    path: "/Cart",
+    name: "Cart",
+    component: Cart
     }
     /*,
 {

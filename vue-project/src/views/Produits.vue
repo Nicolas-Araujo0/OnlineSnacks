@@ -2,6 +2,9 @@
 
 import { ref } from 'vue';
 import { computed } from "vue"
+import { useCartStore } from "../views/store.vue";
+
+const store = useCartStore();
 const input = ref("")
 const products = ref([])
 const availableProducts = ref(null)
@@ -70,10 +73,7 @@ async function removeFavoris(product) {
     await rawResponse.json()
 }
 
-
 const filteredProducts = ref([]);
-
-
 const searchedProducts = computed(() => products.value.filter((product) => { return product.nom.toLowerCase().includes(input.value.toLowerCase()) }))
 
 function getProductsByCat(type) {
@@ -83,6 +83,7 @@ function getImage(url){
     let imgSrc = "src/assets/img/" + url + ".png";
     return imgSrc
 }
+
 </script>
 <template>
     <section class="base">

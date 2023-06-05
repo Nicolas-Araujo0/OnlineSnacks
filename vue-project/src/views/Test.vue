@@ -1,7 +1,7 @@
 <script setup>
 import { inject, ref } from "vue";
 import { myInjectionKey } from "../components/keys.js"
-import { useCounterStore } from "./store.VUE";
+import { useCounterStore } from "./store.vue";
 // const { text, updateText } = inject(myInjectionKey);
 const { text, updateText } = inject(myInjectionKey);
 const inputText = ref("")

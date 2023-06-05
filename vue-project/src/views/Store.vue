@@ -1,6 +1,6 @@
 <script>
 import { defineStore } from 'pinia';
-import { ref,computed } from 'vue';
+import { ref, computed } from 'vue';
 export const useAlertsStore = defineStore("alerts", {
     state: () => ({ count: 0, name: "Edouardo" }),
     getters: {
@@ -20,6 +20,18 @@ export const useCounterStore = defineStore("counter", () => {
     function increment() {
         count.value++
     }
-    return { count, name, doubleCount, increment }
+    return { count, name, doubleCount, increment };
 })
+
+
+
+
+export const useCartStore = defineStore("cart", () => {
+    const content = ref([]);
+    function addToCart($product) {
+        content.value.push = $product;
+    }
+    return { content, addToCart };
+})
+
 </script>

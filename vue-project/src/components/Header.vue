@@ -21,8 +21,7 @@ function lougout() {
                     <span>{{ nom }} {{ prenom }} </span>
                     <span>Solde restant: <solde :argent="userSolde"></solde></span>
                 </div>
-                <img src="https://cdn-icons-png.flaticon.com/128/219/219969.png" alt="avatar" class="users__avatar"
-                    @click="lougout()">
+                <a href="/Cart"><img src="https://cdn-icons-png.flaticon.com/128/219/219969.png" alt="avatar" class="users__avatar"></a>
             </div>
         </section>
     </header>
@@ -46,9 +45,11 @@ b {
 .green {
     color: green;
 }
-.red{
-  color: red;
+
+.red {
+    color: red;
 }
+
 .header section {
     height: 100%;
     display: flex;
@@ -60,6 +61,7 @@ b {
 .header section .header__logo {
     width: 35%;
 }
+
 .nightMode .header section .header__logo {
     filter: invert(99%) sepia(2%) saturate(242%) hue-rotate(155deg) brightness(122%) contrast(100%);
 }
@@ -90,5 +92,4 @@ b {
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.3);
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.25));
-}
-</style>
+}</style>
