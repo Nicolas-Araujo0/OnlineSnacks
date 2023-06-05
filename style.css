@@ -5,26 +5,11 @@
 .red{
     color: red;
 }
-table{
-    width: 95%;
-    text-align: center;
-}
-thead{
-    font-weight: 600;
-}
-table thead th {
-    width: 33%;
-}
-tr{
-    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-}
-td{
-    padding: 5px 0;
-} 
+
 h1 {
     font-size: 26px;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 h2 {

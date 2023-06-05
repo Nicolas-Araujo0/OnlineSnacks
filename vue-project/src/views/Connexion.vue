@@ -1,6 +1,7 @@
 <script>
 import axios from "axios"
-
+import { ref } from "vue"
+const errorMessage = ref("")
 export default {
     name: 'PostFormAxios',
     data() {
@@ -15,31 +16,34 @@ export default {
         submitForm() {
             axios.post("http://localhost:8000/api/user/login", this.form)
                 .then((res) => {
-                    localStorage.setItem('nom', res.data.nom)
-                    localStorage.setItem('prenom', res.data.prenom)
-                    localStorage.setItem('solde', res.data.budget)
-                    localStorage.setItem('id', res.data.id)
-                    if (localStorage.nom != "undefined" && localStorage.prenom != "undefined" && localStorage.solde != "undefined" && localStorage.id != "undefined") {
-                        localStorage.setItem('isAuthenticated', true)
-                        window.location.href = "Produits"
-                    }else{
-                        localStorage.setItem('isAuthenticated', false)
+                    if (res.data == "passwordError") {  
+                        errorMessage.value = "Le mot de passe est incorrect"
+                    } else if (res.data == "identifiantError") {
+                        errorMessage.value = "Le mail est incorrect"
+                    } else {
+                        localStorage.setItem('nom', res.data.nom)
+                        localStorage.setItem('prenom', res.data.prenom)
+                        localStorage.setItem('solde', res.data.budget)
+                        localStorage.setItem('id', res.data.id)
+                        if (localStorage.nom != "undefined" && localStorage.prenom != "undefined" && localStorage.solde != "undefined" && localStorage.id != "undefined") {
+                            localStorage.setItem('isAuthenticated', true)
+                            window.location.href = "Produits"
+                        } else {
+                            localStorage.setItem('isAuthenticated', false)
+                        }
                     }
                 })
                 .catch((error) => {
                     console.log(error)
-                }).finally(() => {
-
-                });
+                })
         }
     }
 }
 </script>
-
 <template>
     <main id="index">
         <header class="banner">
-            <img src="https://jardinage.lemonde.fr/images/dossiers/2017-12/pic-epeiche-1-135005.jpg" alt="logo"
+            <img src="../assets/img/Logo.webp" alt="logo"
                 class="banner__image">
         </header>
         <form action="" v-on:submit.prevent="submitForm">
@@ -48,7 +52,6 @@ export default {
             <label for="pass">Mot de passe :</label>
             <input type="password" name="pass" id="pass" placeholder="*******" v-model="form.pass">
             <input type="submit" value="Connexion">
-            <a href="/Produits">Aller dans le site</a>
         </form>
     </main>
 </template>
@@ -57,7 +60,6 @@ export default {
     width: 80%;
     height: 25%;
     margin: 0 auto;
-    padding: 10% 0;
 }
 
 .banner .banner__image {

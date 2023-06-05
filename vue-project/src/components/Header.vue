@@ -1,10 +1,17 @@
 <script setup>
+
+
+import Solde from "./solde.vue"
+import { useCounterStore } from "../views/store.vue";
 const nom = localStorage.nom
 const prenom = localStorage.prenom
-let solde = localStorage.solde
-
+defineProps(["userSolde"])
+function lougout() {
+    localStorage.clear()
+    window.location.href = "../"
+}
 </script>
-
+<!--  -->
 <template>
     <header class="header">
         <section>
@@ -12,12 +19,12 @@ let solde = localStorage.solde
             <div class="users">
                 <div class="users__infos">
                     <span>{{ nom }} {{ prenom }} </span>
-                    <span>Solde restant: <b v-bind:class="(solde > 10) ? 'green' : 'red'">{{ solde }}€</b></span>
+                    <span>Solde restant: <solde :argent="userSolde"></solde></span>
                 </div>
-                <img src="https://cdn-icons-png.flaticon.com/128/219/219969.png" alt="avatar" class="users__avatar">
+                <img src="https://cdn-icons-png.flaticon.com/128/219/219969.png" alt="avatar" class="users__avatar"
+                    @click="lougout()">
             </div>
         </section>
-        <!-- <input type="text" name="text" id="text" placeholder="ex : croissant"> -->
     </header>
 </template>
 <style>
@@ -39,7 +46,9 @@ b {
 .green {
     color: green;
 }
-
+.red{
+  color: red;
+}
 .header section {
     height: 100%;
     display: flex;
@@ -50,6 +59,9 @@ b {
 
 .header section .header__logo {
     width: 35%;
+}
+.nightMode .header section .header__logo {
+    filter: invert(99%) sepia(2%) saturate(242%) hue-rotate(155deg) brightness(122%) contrast(100%);
 }
 
 .header section .users {

@@ -1,3 +1,15 @@
+<script setup>
+import { ref } from 'vue';
+
+const logs = ref(null)
+async function getHistorique() {
+    const userId = localStorage.id;
+    const response = await fetch("http://localhost:8000/api/historique?id="+userId);
+    logs.value = await response.json();
+}
+
+getHistorique();
+</script>
 <template>
     <section class="base">
             <h1>Historique</h1>
@@ -11,10 +23,10 @@
                 </thead>
                 <tbody>
                     <!-- new tr foreach logs-->
-                    <tr>
-                        <td>2022/11/23</td>
-                        <td>Croissant</td>
-                        <td class="red">5.99€</td>
+                    <tr v-for="log in logs" :key="log.id">
+                        <td>{{ log.dateAchat }}</td>
+                        <td>{{ log.produitNom }}</td>
+                        <td class="red">{{ log.produitCouts }}€</td>
                     </tr>
                 </tbody>
             </table>

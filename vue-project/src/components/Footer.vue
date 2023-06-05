@@ -13,6 +13,7 @@ footer {
     position: sticky;
     bottom: 0;
     background-color: white;
+
     display: flex;
     border-top: 1px solid;
 }
@@ -41,5 +42,13 @@ footer nav div a {
 footer nav div a img {
     width: 50%;
     margin: 0 auto;
+
+}
+
+.nightMode footer nav div a{
+  color: white
+}
+.nightMode footer nav div a img{
+  filter: invert(99%) sepia(2%) saturate(242%) hue-rotate(155deg) brightness(122%) contrast(100%);
 }
 </style>

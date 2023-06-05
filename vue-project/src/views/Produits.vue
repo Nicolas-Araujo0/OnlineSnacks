@@ -1,15 +1,27 @@
 <script setup>
+
 import { ref } from 'vue';
-import solde from "../components/Header.vue"
-const products = ref(null)
+import { computed } from "vue"
+const input = ref("")
+const products = ref([])
 const availableProducts = ref(null)
+
+
 async function getProducts() {
-    const response = await fetch("http://localhost:8000/api/products");
+    const uId = localStorage.id;
+    const response = await fetch("http://localhost:8000/api/products?userId=" + uId);
     products.value = await response.json();
-    availableProducts.value = products.value.filter((product) => product.stock)
+    availableProducts.value = products.value.filter((product) => product.stock > 0)
 }
 getProducts();
 
+const types = ref([])
+async function getType() {
+    const response = await fetch("http://localhost:8000/api/products/type");
+    types.value = await response.json();
+
+}
+getType()
 const url = "http://localhost:8000/api/products/consume?id="
 async function consume(product) {
     if (!(product.prix_salarie > localStorage.solde)) {
@@ -18,7 +30,6 @@ async function consume(product) {
         if (result.result != "error") {
             product.stock--
             localStorage.solde = localStorage.solde - product.prix_salarie
-            solde = localStorage.solde
             if (product.stock == 0) {
                 alert("You took the last " + product.nom)
             }
@@ -27,32 +38,86 @@ async function consume(product) {
         alert("Ya plus de sous")
     }
 }
+async function addFavoris(product) {
+    product.fav = 1;
+    const url = "http://localhost:8000/api/favoris/add";
+    let uId = localStorage.id;
+    let data = { id: product.id, userId: uId }
+    const rawResponse = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+    });
+    await rawResponse.json()
+}
+async function removeFavoris(product) {
 
+    product.fav = 0;
+    const url = "http://localhost:8000/api/favoris/remove";
+    let userId = localStorage.id;
+    let data = { id: product.id, userId: userId }
+    const rawResponse = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+    });
+    await rawResponse.json()
+}
+
+
+const filteredProducts = ref([]);
+
+
+const searchedProducts = computed(() => products.value.filter((product) => { return product.nom.toLowerCase().includes(input.value.toLowerCase()) }))
+
+function getProductsByCat(type) {
+    return searchedProducts.value.filter(p => p.type == type)
+}
+function getImage(url){
+    let imgSrc = "src/assets/img/" + url + ".png";
+    return imgSrc
+}
 </script>
-
 <template>
     <section class="base">
         <h1>Accueil</h1>
-        <input type="text" name="text" id="text" placeholder="ex : croissant">
+
+        <input type="text" name="text" id="text" placeholder="ex : croissant" v-model="input">
         <!-- boucle for create an h2 with title specific and article -->
-        <h2>Sandwiches :</h2>
         <div class="products">
-            <article v-for="product in availableProducts" :key="product.id" class="products__product">
-                <img src="../assets/img/etoile.png" alt="" class="product__rating">
-                <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/42/4d/86/424d8655-8a04-875e-3121-bb0444fb8ae6/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/256x256bb.jpg"
-                    alt="" class="product__food">
-                <div><span>{{ product.nom }}</span>
-                    <span>{{ product.stock }}</span>
-                </div>
-                <div class="product__buy">
-                    <span>{{ product.prix_salarie }}€</span>
-                    <button @click="() => consume(product)">Acheter</button>
-                </div>
-            </article>
+            <template v-for="tip in types">
+                <h2 v-if="getProductsByCat(tip.type).length != 0">{{ tip.type }}</h2>
+                <article v-for="product in getProductsByCat(tip.type)" :key="product.id" class="products__product"
+                    v-show="product.stock > 0">
+                    <img :src="product.fav == 1 ? 'src/assets/img/star.png' : 'src/assets/img/etoile.png'" alt=""
+                        class="product__rating" @click="product.fav != 1 ? addFavoris(product) : removeFavoris(product)">
+                    <img :src=getImage(product.image) alt="" class="product__food">
+                    <div><span>{{ product.nom }}</span>
+                        <span>{{ product.stock }}</span>
+                    </div>
+                    <div class="product__buy">
+                        <span>{{ product.prix_salarie }}€</span>
+                        <button @click="consume(product), $emit('modifySolde', product.prix_salarie)">Acheter</button>
+                    </div>
+                </article>
+            </template>
+
         </div>
     </section>
 </template>
 <style>
+h2 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-transform: capitalize;
+}
+
 input[type=text] {
     width: 70%;
     height: 25px;
@@ -73,7 +138,6 @@ input[type=text] {
     grid-template-columns: repeat(2, 1fr);
     grid-row-gap: 20px;
     grid-column-gap: 20px;
-    padding-bottom: 80px;
 }
 
 .products .products__product {
@@ -91,6 +155,10 @@ input[type=text] {
     display: flex;
     justify-content: space-between;
     padding-left: 10px;
+}
+
+.products .products__product>div:first-of-type span:first-of-type {
+    text-transform: capitalize;
 }
 
 .products .products__product>div:first-of-type span:last-of-type {
