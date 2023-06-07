@@ -1,10 +1,19 @@
 <template>
     <footer>
         <nav>
-            <div><a href="/Favoris "><img src="../assets/img/etoile.png" alt="icon"><span>Favoris</span></a></div>
-            <div><a href="/Produits"><img src="../assets/img/abri.png" alt="icon"><span>Accueil</span></a></div>
-            <div><a href="/Historique"><img src="../assets/img/historique.png" alt="icon"><span>Historique</span></a></div>
-            <div><a href="/Contact"><img src="../assets/img/email.png" alt="icon"><span>Contact</span></a></div>
+            <div>
+                <RouterLink to="/Favoris"><img src="../assets/img/etoile.png" alt="icon"><span>Favoris</span></RouterLink>
+            </div>
+            <div>
+                <RouterLink to="/Produits"><img src="../assets/img/abri.png" alt="icon"><span>Accueil</span></RouterLink>
+            </div>
+            <div>
+                <RouterLink to="/Historique"><img src="../assets/img/historique.png" alt="icon"><span>Historique</span>
+                </RouterLink>
+            </div>
+            <div>
+                <RouterLink to="/Contact"><img src="../assets/img/email.png" alt="icon"><span>Contact</span></RouterLink>
+            </div>
         </nav>
     </footer>
 </template>
@@ -45,10 +54,11 @@ footer nav div a img {
 
 }
 
-.nightMode footer nav div a{
-  color: white
+.nightMode footer nav div a {
+    color: white
 }
-.nightMode footer nav div a img{
-  filter: invert(99%) sepia(2%) saturate(242%) hue-rotate(155deg) brightness(122%) contrast(100%);
+
+.nightMode footer nav div a img {
+    filter: invert(99%) sepia(2%) saturate(242%) hue-rotate(155deg) brightness(122%) contrast(100%);
 }
 </style>

@@ -2,6 +2,8 @@
 import axios from "axios"
 import { ref } from "vue"
 const errorMessage = ref("")
+
+
 export default {
     name: 'PostFormAxios',
     data() {
@@ -27,7 +29,8 @@ export default {
                         localStorage.setItem('id', res.data.id)
                         if (localStorage.nom != "undefined" && localStorage.prenom != "undefined" && localStorage.solde != "undefined" && localStorage.id != "undefined") {
                             localStorage.setItem('isAuthenticated', true)
-                            window.location.href = "Produits"
+                            // window.location.href = "Produits"
+                            this.$router.push({ name : 'Produits' })
                         } else {
                             localStorage.setItem('isAuthenticated', false)
                         }

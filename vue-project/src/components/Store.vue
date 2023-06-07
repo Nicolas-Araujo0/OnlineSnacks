@@ -25,13 +25,25 @@ export const useCounterStore = defineStore("counter", () => {
 
 
 
-
 export const useCartStore = defineStore("cart", () => {
     const content = ref([]);
     function addToCart($product) {
-        content.value.push = $product;
+        $product.quantity = 1
+        if (content.value.findIndex((currProduct) => currProduct.id == $product.id) == -1) {
+            content.value.push($product);
+            console.log(content)
+        }
     }
     return { content, addToCart };
 })
 
+export const useUserStore = defineStore("user", () => {
+    const budget = ref(Number);
+    budget.value = localStorage.solde;
+    function updateBudget($newSolde) {
+        budget.value = $newSolde;
+        localStorage.solde = $newSolde
+    }
+    return { budget, updateBudget };
+})
 </script>

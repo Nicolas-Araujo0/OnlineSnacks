@@ -1,14 +1,19 @@
 <script setup>
+import { storeToRefs } from "pinia";
+import { useUserStore, useCartStore } from "./Store.vue"
+import { useRouter, useRoute } from "vue-router";
+const store = useUserStore();
+const { budget } = storeToRefs(store);
 
-
-import Solde from "./solde.vue"
-import { useCounterStore } from "../views/store.vue";
+const cart = useCartStore()
+const { content } = storeToRefs(cart);
+const router = useRouter();
 const nom = localStorage.nom
 const prenom = localStorage.prenom
-defineProps(["userSolde"])
+
 function lougout() {
     localStorage.clear()
-    window.location.href = "../"
+    router.push({ path: "/" })
 }
 </script>
 <!--  -->
@@ -19,9 +24,11 @@ function lougout() {
             <div class="users">
                 <div class="users__infos">
                     <span>{{ nom }} {{ prenom }} </span>
-                    <span>Solde restant: <solde :argent="userSolde"></solde></span>
+                    <span>Solde restant: <b v-bind:class="(budget > 10) ? 'green' : 'red'">{{ budget }}€</b></span>
                 </div>
-                <a href="/Cart"><img src="https://cdn-icons-png.flaticon.com/128/219/219969.png" alt="avatar" class="users__avatar"></a>
+                <RouterLink to="/Cart" class="infos"><img src="https://cdn-icons-png.flaticon.com/128/219/219969.png" alt="avatar"
+                        class="users__avatar"><span v-if="content.length > 0">{{content.length}}</span></RouterLink>
+                <a @click="lougout()" class="lougout"><img src="src/assets/img/deco.png" alt=""></a>
             </div>
         </section>
     </header>
@@ -41,7 +48,21 @@ function lougout() {
 b {
     font-weight: 600;
 }
-
+.infos{
+    position: relative;
+}
+.infos span{
+    position: absolute;
+    top: -30%;
+    left: 60%;
+    width: 20px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    display: block;
+    background-color: rgb(255, 56, 56);
+    border-radius: 50%;
+}
 .green {
     color: green;
 }
@@ -75,6 +96,15 @@ b {
     width: 40px;
     height: 36px;
     align-self: center;
+}
+
+.header section .users .lougout {
+    width: 20px;
+}
+
+.header section .users .lougout img {
+    width: 100%;
+    vertical-align: -webkit-baseline-middle;
 }
 
 .header section .users .users__infos {

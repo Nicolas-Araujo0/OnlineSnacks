@@ -2,9 +2,16 @@
 
 import { ref } from 'vue';
 import { computed } from "vue"
-import { useCartStore } from "../views/store.vue";
+import { storeToRefs } from "pinia";
+import { useCartStore } from "../components/Store.vue";
+import { useUserStore } from '../components/Store.vue';
 
 const store = useCartStore();
+const { content } = storeToRefs(store)
+
+
+const { updateBudget } = useUserStore();
+updateBudget(localStorage.solde)
 const input = ref("")
 const products = ref([])
 const availableProducts = ref(null)
@@ -26,21 +33,21 @@ async function getType() {
 }
 getType()
 const url = "http://localhost:8000/api/products/consume?id="
-async function consume(product) {
-    if (!(product.prix_salarie > localStorage.solde)) {
-        const response = await fetch(url + product.id + "&userId=" + localStorage.id);
-        let result = await response.json()
-        if (result.result != "error") {
-            product.stock--
-            localStorage.solde = localStorage.solde - product.prix_salarie
-            if (product.stock == 0) {
-                alert("You took the last " + product.nom)
-            }
-        }
-    } else {
-        alert("Ya plus de sous")
-    }
-}
+// async function consume(product) {
+//     if (!(product.prix_salarie > localStorage.solde)) {
+//         const response = await fetch(url + product.id + "&userId=" + localStorage.id);
+//         let result = await response.json()
+//         if (result.result != "error") {
+//             product.stock--
+//             localStorage.solde = localStorage.solde - product.prix_salarie
+//             if (product.stock == 0) {
+//                 alert("You took the last " + product.nom)
+//             }
+//         }
+//     } else {
+//         alert("Ya plus de sous")
+//     }
+// }
 async function addFavoris(product) {
     product.fav = 1;
     const url = "http://localhost:8000/api/favoris/add";
@@ -79,7 +86,7 @@ const searchedProducts = computed(() => products.value.filter((product) => { ret
 function getProductsByCat(type) {
     return searchedProducts.value.filter(p => p.type == type)
 }
-function getImage(url){
+function getImage(url) {
     let imgSrc = "src/assets/img/" + url + ".png";
     return imgSrc
 }
@@ -104,7 +111,8 @@ function getImage(url){
                     </div>
                     <div class="product__buy">
                         <span>{{ product.prix_salarie }}€</span>
-                        <button @click="consume(product), $emit('modifySolde', product.prix_salarie)">Acheter</button>
+                        <!-- <button @click="consume(product), $emit('modifySolde', product.prix_salarie)">Acheter</button> -->
+                        <button id="add" :disabled="product.quantity != undefined? true : false" @click="store.addToCart(product)">Ajouter</button>
                     </div>
                 </article>
             </template>
@@ -113,6 +121,10 @@ function getImage(url){
     </section>
 </template>
 <style>
+#add:disabled {
+    background-color: dimgrey;
+    color: linen;
+}
 h2 {
     grid-column-start: 1;
     grid-column-end: 3;

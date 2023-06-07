@@ -5,7 +5,6 @@ import Contact from "../views/Contact.vue"
 import Favoris from "../views/Favoris.vue"
 import Connexion from "../views/Connexion.vue"
 import Provide from "../views/Provide.vue"
-import Store  from "../views/Store.vue"
 import Cart from "../views/Cart.vue"
 
 const router = createRouter({
@@ -42,11 +41,6 @@ const router = createRouter({
       component: Provide
     },
     {
-      path: '/Store',
-      name: 'Store',
-      component: Store
-    },
-    {
     path: "/Cart",
     name: "Cart",
     component: Cart
@@ -70,6 +64,7 @@ const router = createRouter({
 })
 router.beforeEach(async (to, from) => {
   const isAuthenticated = localStorage.isAuthenticated;
+
 
   if (!isAuthenticated && to.path !== "/") {
     return { name: "home" }
