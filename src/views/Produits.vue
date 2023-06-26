@@ -33,21 +33,6 @@ async function getType() {
 }
 getType()
 const url = "http://localhost:8000/api/products/consume?id="
-// async function consume(product) {
-//     if (!(product.prix_salarie > localStorage.solde)) {
-//         const response = await fetch(url + product.id + "&userId=" + localStorage.id);
-//         let result = await response.json()
-//         if (result.result != "error") {
-//             product.stock--
-//             localStorage.solde = localStorage.solde - product.prix_salarie
-//             if (product.stock == 0) {
-//                 alert("You took the last " + product.nom)
-//             }
-//         }
-//     } else {
-//         alert("Ya plus de sous")
-//     }
-// }
 async function addFavoris(product) {
     product.fav = 1;
     const url = "http://localhost:8000/api/favoris/add";
